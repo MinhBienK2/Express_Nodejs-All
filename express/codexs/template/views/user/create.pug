@@ -1,0 +1,20 @@
+h1 create user
+
+if errors
+    each err in errors 
+        div=err
+
+form(action="../user/create",method="POST",enctype="multipart/form-data")
+    label(for="name") name: 
+    input(type="text",name="name",id="name" ,value =values ? values.name : '')
+    br
+    br
+    label(for="phone") phone:
+    input(type="phone" , name = "phone", id ="phone",value=values ? values.phone : '')
+    br
+    br
+    label(for="avatar") avatar:
+    input(type="file" , name = "avatar", id ="avatar")
+    br
+    br
+    button Create

@@ -1,0 +1,17 @@
+
+h2 search
+a(href="../user") user
+table(style='width:60%', border='1',text-align='center')
+    tr
+        th name
+        th phone
+        th email
+        th password 
+    each user in users
+        tr
+            td(style="text-align:center")=user.name
+            td(style="text-align:center")=user.phone
+            td(style="text-align:center")=user.email
+            td(style="text-align:center")=user.password
+
+    

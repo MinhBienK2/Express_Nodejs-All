@@ -1,0 +1,16 @@
+h1 login 
+
+if errors
+    each err in errors 
+        div=err
+
+form(method="POST")
+    label(for="email") email: 
+    input(type="text",name="email",id="email" ,value =values ? values.email : '')
+    br
+    br
+    label(for="password") password:
+    input(type="text" , name = "password", id ="password",value=values ? values.password : '')
+    br
+    br
+    button login

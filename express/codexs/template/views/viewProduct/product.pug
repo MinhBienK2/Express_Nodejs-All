@@ -1,0 +1,28 @@
+
+h2 Prodect
+a(href="/") home
+p
+span Thêm vào giỏ :
+span=countNumber
+
+- var n = 1;
+ul 
+    while n <= 10
+        button 
+            a(href="/product?page="+n)= n++
+
+table(style='width:60%', border='1',text-align='center')
+    tr
+        th nameProduct
+        th image
+        th description
+        th add product
+    each product in products
+        tr
+            td(style="text-align:center")=product.nameProduct
+            td 
+                img(src=product.image,style="width:40px;")
+            td(style="text-align:center")=product.description
+            td 
+                button 
+                    a(href="/cart/add/" + product.id) add 

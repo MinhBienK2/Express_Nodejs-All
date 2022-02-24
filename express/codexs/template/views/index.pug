@@ -1,0 +1,30 @@
+extends ./layout/common
+block content
+    h2 user Search 
+    a(href="/") home
+    p
+        a(href="/user/create") create user
+
+    form(action = "./user/search" method = "GET")
+        lable(for="name") Enter word need search : 
+        input(type = "text",name = "q",id="name")
+        button Search
+
+    table(style='width:60%', border='1',text-align='center')
+        tr
+            th image
+            th name
+            th phone
+            th email
+            th password
+            th viewer
+        each user in users
+            tr
+                th 
+                    img(src=user.avatar,style="width:50px;")
+                td(style="text-align:center")=user.name
+                td(style="text-align:center")=user.phone
+                td(style="text-align:center")=user.email
+                td(style="text-align:center")=user.password
+                td(style="text-align:center")
+                    a(href='/user/infor/' + user.id) viewer
