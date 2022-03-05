@@ -1,0 +1,27 @@
+{
+  "name": "test-mongoose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "contents.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "start:prod": "NODE_ENV=production nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "ndb server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2.3",
+    "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0",
+    "ndb": "^1.1.5",
+    "nodemon": "^2.0.15"
+  }
+}
