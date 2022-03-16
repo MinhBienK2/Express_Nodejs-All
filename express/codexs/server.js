@@ -26,7 +26,9 @@ const port = process.env.PORT || 3000
 app.use(cookieParser('dsfjiddsoie23$kjfsi34@sa'))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, 'public'),{
+    extensions : ['html', 'htm']
+}))
 app.use(sesstionMiddleware)
 
 //connect DB

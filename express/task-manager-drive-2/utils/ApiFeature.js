@@ -27,7 +27,7 @@ class ApiFeature {
         return this
     }
 
-    limitfields(){
+    limitFields(){
         if(this.queryString.fields){
             const fields = this.queryString.fields.split(',').join(' ')
             this.query = this.query.select(fields)

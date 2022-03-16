@@ -32,36 +32,26 @@ const createSendToken = (user,statusCode,res) => {
     })
 }
 
-const filterProperties = function (obj, ...allowed) {
-    const newObj = {};
-    Object.keys(obj).forEach(el => {
-        if(allowed.includes(el))
-            newObj[el] = obj[el]
-    })
-    return newObj
-}
-
 exports.signup = CatchAsync(async (req,res,next) => {
     const user =  new User(req.body)
-    // const token = await jwt.sign({id : user._id.toString()},process.env.JWT_SECRET,{expiresIn : process.env.JWT_EXPIRES_IN})
-    const token = signToken(user._id)
-    // user.tokens = user.tokens.concat({token})
     await user.save()
     createSendToken(user,201,res)
 })
 
 exports.login = CatchAsync(async (req,res,next) => {
     const {email,password} = req.body
-    if(!email || !password) return next(new AppError('Please provide email and password',400))
+    if(!email || !password) 
+        return next(new AppError('Please provide email and password',400))
     const user = await User.findOne({email}).select('+password')
     const isCheck = await user.correctPassword(password,user.password)
-    if(!isCheck || !user) return next(new AppError('Incorrect email or password',401))
+    if(!isCheck || !user) 
+        return next(new AppError('Incorrect email or password',401))
     const token = signToken(user._id)
     // const token = await user.generateAuthToken()
     createSendToken(user,200,res)
 })
 
-exports.project = CatchAsync(async (req,res,next) => {
+exports.protect = CatchAsync(async (req,res,next) => {
     let token;
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
         token = req.headers.authorization.split(' ')[1]
@@ -79,7 +69,7 @@ exports.project = CatchAsync(async (req,res,next) => {
 
 exports.restrictTo = (...roles)=> {
     return (req,res,next) => {
-        console.log(roles)
+        // console.log(roles)
         if(!roles.includes(req.user.role)) {
             return next(new AppError('You do not have permission to perform this action',403))
         }
@@ -143,21 +133,4 @@ exports.updateMyPassword = CatchAsync(async (req,res,next) => {
     await user.save()
     const token = signToken(user._id)
     createSendToken(user,200,res)
-})
-
-exports.updateUser = CatchAsync(async (req,res,next) => {
-    const user = await User.findByIdAndUpdate(req.user.id,filterProperties(req.body,"name","email"),{
-        new : true,
-        runValidators : true
-    })
-    createSendToken(user,200,res)
-})
-
-
-exports.deleteMe = CatchAsync(async (req,res,next) => {
-    await User.findByIdAndUpdate(req.user.id,{active : false})
-    res.status(204).json({
-        status : 'success',
-        data : null
-    })
 })

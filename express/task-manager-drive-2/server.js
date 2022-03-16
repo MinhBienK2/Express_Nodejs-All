@@ -11,6 +11,7 @@ const hpp = require('hpp')  // prevent http param pollution
 
 const userRouter = require('./src/routes/user.router');
 const tourRouter = require('./src/routes/tour.router');
+const reviewRouter = require('./src/routes/review.router');
 
 const AppError = require('./utils/appError');
 const errorHandler = require('./controllers/error.controller');
@@ -66,7 +67,8 @@ app.use(express.static(path.join(__dirname, "public")))
 
 // mount routers
 app.use('/users',userRouter)
-app.use('/',tourRouter)
+app.use('/tours',tourRouter)
+app.use('/reviews',reviewRouter)
 
 app.all('*',(req,res,next)=>{
     // const err = new Error (`Can not find ${req.originalUrl} on this server ! `)

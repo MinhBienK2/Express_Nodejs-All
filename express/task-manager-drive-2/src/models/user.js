@@ -59,6 +59,16 @@ const userSchema = new mongoose.Schema({
     // ]
 })
 
+userSchema.options.toJSON = {
+    transform: function(doc, ret, options) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+        delete ret.password;
+        delete ret.role
+    }
+};
+
 userSchema.pre('save',async function(next){
     if(!this.isModified('password')) return next()
     this.password = await bcrypt.hash(this.password,12)
