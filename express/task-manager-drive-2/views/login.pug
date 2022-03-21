@@ -1,0 +1,10 @@
+extends base
+
+block content
+    form(action='/login',method='POST').form
+        label(for='email') email 
+        input(type='text' name='email' id='email' placeholder='email' required)
+        br
+        label(for='password') password
+        input(type='password' name='password' id='password' required)
+        input(type='submit' value='login' id='login')

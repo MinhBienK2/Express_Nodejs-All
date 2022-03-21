@@ -1,0 +1,22 @@
+doctype html
+html(lang='en')
+    head      
+        block head
+            meta(charset='UTF-8')
+            meta(name='viewport' content='width=device-width, initial-scale=1.0')
+            link(rel='stylesheet', href='/css/style.css')
+            title Natural Language Processing
+    body
+        include _header
+
+        //- Include the content
+        block content
+            h1 This is content
+            
+        include _footer
+        
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js')
+        //- script(src='/js/mapBox.js')
+        script(src='/js/login.js')
+        
+

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css' rel='stylesheet' />
+    <title>Document</title>
+
+    <style>
+        .marker {
+            background-image: url('data:image/jpeg;base64,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');
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            /* border-radius: 50%; */
+            cursor: pointer;
+            /* transition: all .3s ease-in-out; */
+        }
+    </style>
+</head>
+<body>
+    <div id='map' style='width: 100%; height: 600px;'></div>
+
+    <script>
+        const locations = [
+            {
+                coordinates : [106.167813,20.427057]
+            },
+            {
+                coordinates : [106.336401,20.458445]
+            }
+        ] 
+        mapboxgl.accessToken = 'pk.eyJ1IjoibWluaGJpZW4iLCJhIjoiY2wweHhtcjQ3MWoxeTNqb2EzdDRlZHo4MCJ9.7LVK46-MdnV30KWXyNc5bQ';
+
+        const map = new mapboxgl.Map({
+            container: 'map', // container ID
+            style: 'mapbox://styles/mapbox/streets-v11', // style URL
+            // center: [106.167813,20.427057], // starting position [lng, lat]
+            // zoom: 10 // starting zoom
+        });
+        
+        const bounds = new mapboxgl.LngLatBounds()
+
+        locations.forEach(loc => {
+            const el = document.createElement('div');
+            el.className = 'marker';
+            new mapboxgl.Marker({
+                element : el,
+                anchor : 'bottom'
+            })
+                .setLngLat(loc.coordinates)
+                .addTo(map);
+            new mapboxgl.Popup({
+                offset : 30 
+            })
+                .setLngLat(loc.coordinates)
+                .setHTML('<p>Hello World!</p>')
+                .addTo(map);
+            bounds.extend(loc.coordinates)
+        })
+        map.fitBounds(bounds,{
+            padding : {
+                top : 200,
+                bottom : 200,
+                left : 600,
+                right : 600
+            }
+        })
+
+    </script>
+</body>
+</html>

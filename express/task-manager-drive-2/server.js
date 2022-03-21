@@ -12,6 +12,7 @@ const hpp = require('hpp')  // prevent http param pollution
 const userRouter = require('./src/routes/user.router');
 const tourRouter = require('./src/routes/tour.router');
 const reviewRouter = require('./src/routes/review.router');
+const viewsRouter = require('./src/routes/views.route');
 
 const AppError = require('./utils/appError');
 const errorHandler = require('./controllers/error.controller');
@@ -30,6 +31,7 @@ console.log(process.env.NODE_ENV)
 
 // set security HTTP headers
 app.use(helmet())
+
 
 // limit request from same API
 const limiter = rateLimit({
@@ -65,6 +67,12 @@ app.use(hpp({
 // serving static files
 app.use(express.static(path.join(__dirname, "public")))
 
+app.set('view engine','pug')
+app.set('views',path.join(__dirname, 'views'))
+
+
+// views router
+app.use('/',viewsRouter)
 // mount routers
 app.use('/users',userRouter)
 app.use('/tours',tourRouter)

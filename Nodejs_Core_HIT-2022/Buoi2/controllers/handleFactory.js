@@ -20,12 +20,16 @@ exports.getOne = (Model) => CatchAsync(async (req,res,next) => {
 exports.getAll = (Model) => CatchAsync(async (req,res,next) => {
     const reg = JSON.stringify(req.query).replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`)
     const par = JSON.parse(reg)
+    const get = Object.keys(par)
+    console.log(get)
     let filter = {}
     if(par.name) {
         filter.name = {
             $regex: par.name,
             $options: 'i'
         }
+    }else {
+        filter = {...par}
     }
     console.log(filter)
     const docs = await Model.find(filter)
