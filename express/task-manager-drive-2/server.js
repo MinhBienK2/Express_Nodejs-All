@@ -3,11 +3,12 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit') 
-const helmet = require('helmet')
+const helmet = require('helmet') 
 const path = require('path')
 const mongoSanitize = require('express-mongo-sanitize');    // against NoSQL injection
 const xss = require('xss-clean')   // against XSS injection
 const hpp = require('hpp')  // prevent http param pollution
+const cors=require("cors")  // cross origin resource sharing
 
 const userRouter = require('./src/routes/user.router');
 const tourRouter = require('./src/routes/tour.router');
@@ -30,7 +31,10 @@ if(process.env.NODE_ENV === 'development'){
 console.log(process.env.NODE_ENV)
 
 // set security HTTP headers
-app.use(helmet())
+app.use(helmet({
+    contentSecurityPolicy: false,
+    // referrerPolicy: { policy: "no-referrer" }
+}))
 
 
 // limit request from same API
@@ -67,9 +71,22 @@ app.use(hpp({
 // serving static files
 app.use(express.static(path.join(__dirname, "public")))
 
-app.set('view engine','pug')
-app.set('views',path.join(__dirname, 'views'))
+// pug template engine
+// app.set('view engine','pug')
+// app.set('views',path.join(__dirname, 'views/pug'))
 
+// ejs template engine
+app.set('view engine','ejs')
+app.set('views',path.join(__dirname, 'views/ejs'))
+
+
+// cors middleware
+const corsOptions ={
+    origin:'*', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200,
+ }
+ app.use(cors(corsOptions)) // Use this after the variable declaration
 
 // views router
 app.use('/',viewsRouter)
@@ -79,18 +96,9 @@ app.use('/tours',tourRouter)
 app.use('/reviews',reviewRouter)
 
 app.all('*',(req,res,next)=>{
-    // const err = new Error (`Can not find ${req.originalUrl} on this server ! `)
-    // err.status = 'fail'
-    // err.statusCode = 404
-    // next(err)
-
-    // res.status(404).json({
-    //     status : 'fail',
-    //     message : 'Page not found'
-    // })
-
     next(new AppError(`Can not find ${req.originalUrl} on this server ! `,404))
 })
+
 
 app.use(errorHandler)
 const server = app.listen(port,()=>{
