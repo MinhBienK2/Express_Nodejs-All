@@ -1,0 +1,15 @@
+<%- include('_header'); -%>
+    <form action="/users/login" method="POST" >
+        <label for="">username</label>
+        <input type="email" name="email" id="email" placeholder="enter email" >
+        <br>
+        <label for="">password</label>
+        <input type="password" name="password" id="password">
+        <br>
+        <button id = "submit">send</button>
+    </form>
+    <br>
+    <button>
+        <a href="/users/forgetPassword">forgetPassword</a>
+    </button> 
+<%- include('_footer'); -%>

@@ -1,11 +1,11 @@
 extends base
 
-//- block append head
+block append head
     //- script(src='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js')
     //- link(href='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css' rel='stylesheet')
     
 block content 
-    each tour in tours
-        h1= tour.name
+    each user in users
+        img(src=`${user.photo}` alt='Girl in a jacket')
         //- #map(data-locations=`${JSON.stringify(tour.locations)}`)
         //- -return

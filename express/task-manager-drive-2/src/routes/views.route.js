@@ -1,8 +1,15 @@
 const router = require('express').Router()
-const {overTours,login} = require('../../controllers/views.controller')
+const {overViews,login,overTours} = require('../../controllers/views.controller')
+const {protect,restrictTo,isLoggedIn} = require('../../controllers/auth.controller')
+
+router.use(isLoggedIn)
 
 router
-    .route('/overViews')
+    .route('/')
+    .get(overViews)
+
+router 
+    .route('/overTours')
     .get(overTours)
 
 router 

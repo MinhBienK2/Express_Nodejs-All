@@ -1,11 +1,18 @@
 const Tour = require('../src/models/tour')
+const User = require('../src/models/user')
 const CatchAsync = require('../utils/CatchAsync')
 
-exports.overTours = CatchAsync(async (req,res,next) => {
-        const tour = await Tour.find()
+exports.overViews = CatchAsync(async (req,res,next) => {
+        const user = await User.find()
         res.render('overView',{
                 title : 'Over Tours',
-                tours : tour
+                users : user
+        })
+})
+
+exports.overTours = CatchAsync(async (req,res,next) => {
+        res.render('tour',{
+            title : 'tour'
         })
 })
 

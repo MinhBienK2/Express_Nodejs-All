@@ -3,6 +3,13 @@ h1 Header ne
 button 
     a(href='/') Home
 button 
-    a(href='/overViews') Overview
-button
-    a(href='/login') login
+    a(href='/overTours') overTours
+if user
+    button#logout(style='margin-left: 100px;')
+        a(href='/logout') logout
+    span=user.name
+else
+    button(style='margin-left: 100px;')
+        a(href='/login') login
+    button()
+        a(href='/signup') sign up

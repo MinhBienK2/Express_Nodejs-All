@@ -11,7 +11,7 @@ const handleValidationErrorDB = (error) =>{
 }
 
 const sendErrorDevelopment = (err,res) => {
-    // console.log(err.statusCode)
+    console.log(err)
     res.status(err.statusCode).json({
         statusCode : err.statusCode,
         status : err.status,

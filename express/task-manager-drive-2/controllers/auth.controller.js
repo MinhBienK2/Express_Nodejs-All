@@ -21,7 +21,8 @@ const createSendToken = (user,statusCode,res) => {
         httpOnly : true
     }
     const token = signToken(user._id)
-    if(process.env.NODE_ENV ==='production') cookieOptions.secure = true
+    if(process.env.NODE_ENV ==='production') 
+        cookieOptions.secure = true
     res.cookie('jwt',token,cookieOptions)
     res.status(statusCode).json({
         status : 'success',
@@ -51,10 +52,22 @@ exports.login = CatchAsync(async (req,res,next) => {
     createSendToken(user,200,res)
 })
 
+exports.logout = CatchAsync(async (req,res,next) => {
+    res.cookie('jwt','loggedout',{
+        expires : new Date(Date.now() + 10 * 1000),
+        httpOnly : true
+    })
+    res.status(200).json({
+        status : 'success'
+    })
+})
+
 exports.protect = CatchAsync(async (req,res,next) => {
     let token;
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
         token = req.headers.authorization.split(' ')[1]
+    } else if(req.cookies.jwt){
+        token = req.cookies.jwt
     }
     if(!token) return next(new AppError('You are not logged in',401))
     const decoded = await promisify(jwt.verify)(token,process.env.JWT_SECRET)
@@ -66,6 +79,26 @@ exports.protect = CatchAsync(async (req,res,next) => {
     req.user = freshUser
     next()
 })
+
+exports.isLoggedIn = async (req,res,next) => {
+    if(req.cookies.jwt){
+        try{
+            const decoded = await promisify(jwt.verify)(req.cookies.jwt,process.env.JWT_SECRET)
+            const currentUser = await User.findById(decoded._id)
+            if(!currentUser) 
+                return next()
+            if(currentUser.changePasswordAfter(decoded.iat)){
+                return next()
+            }
+            res.locals.user = currentUser
+            return next()
+        } catch(err){
+            return next()
+        }
+    }
+    next()
+}
+
 
 exports.restrictTo = (...roles)=> {
     return (req,res,next) => {

@@ -1,11 +1,15 @@
 const router = require('express').Router()
-const {signup,login,forgotPassword,resetPassword,protect,restrictTo,updateMyPassword} = require('../../controllers/auth.controller')
-const {getAllUsers,getUser,getMe,createUser,updateMe,updateUser,deleteMe,deleteUser} = require('../../controllers/user.controller')
+const {signup,login,logout,forgotPassword,resetPassword,protect,restrictTo,updateMyPassword,} = require('../../controllers/auth.controller')
+const {getAllUsers,getUser,getMe,createUser,updateMe,updateUser,deleteMe,deleteUser,uploadFile,upload,resizeUserPhoto} = require('../../controllers/user.controller')
+
+router.post('/upload',protect,upload.single('photo'),resizeUserPhoto,uploadFile)
 
 router.post('/singUp',signup)
 router.post('/login',login)
 router.post('/forgotPassword',forgotPassword)
 router.patch('/resetPassword/:token',resetPassword)
+
+router.get('/logout',logout)
 
 // set router private user (only login can access)
 router.use(protect)

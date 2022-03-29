@@ -2,9 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const path = require('path')
+const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit') 
 const helmet = require('helmet') 
-const path = require('path')
 const mongoSanitize = require('express-mongo-sanitize');    // against NoSQL injection
 const xss = require('xss-clean')   // against XSS injection
 const hpp = require('hpp')  // prevent http param pollution
@@ -49,6 +50,7 @@ app.use(limiter)
 
 // body parser, reading data from body into req.body
 app.use(express.json({limit: '10kb'}));
+app.use(express.urlencoded({extended : true, limit : '10kb'}))    // dùng kiểu như gửi dữ liệu từ form,  extended : true, to allow nested objects in body
 
 // set data sanitization against NoSQL query injection
 app.use(mongoSanitize());
@@ -72,12 +74,12 @@ app.use(hpp({
 app.use(express.static(path.join(__dirname, "public")))
 
 // pug template engine
-// app.set('view engine','pug')
-// app.set('views',path.join(__dirname, 'views/pug'))
+app.set('view engine','pug')
+app.set('views',path.join(__dirname, 'views/pug'))
 
 // ejs template engine
-app.set('view engine','ejs')
-app.set('views',path.join(__dirname, 'views/ejs'))
+// app.set('view engine','ejs')
+// app.set('views',path.join(__dirname, 'views/ejs'))
 
 
 // cors middleware
@@ -85,8 +87,11 @@ const corsOptions ={
     origin:'*', 
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200,
+    // CrossOriginEmbedderPolicy: require-corp
  }
  app.use(cors(corsOptions)) // Use this after the variable declaration
+
+ app.use(cookieParser())
 
 // views router
 app.use('/',viewsRouter)
@@ -105,16 +110,16 @@ const server = app.listen(port,()=>{
     console.log('......................')
 })
 
-process.on('uncaughtUnexception', err => {
-    console.log(err.name, err.message)
-    console.log('uncaughtUnexception ', 'shutdowning ...')
-    process.exit(1)  
-})
+// process.on('uncaughtUnexception', err => {
+//     console.log(err.name, err.message)
+//     console.log('uncaughtUnexception ', 'shutdowning ...')
+//     process.exit(1)  
+// })
 
-process.on('unhandledRejection', err => {
-    console.log(err.name, err.message)
-    console.log('unhandledRejection ', 'shutdowning ...')
-     server.close(() => {
-         process.exit(1)
-     })   
-})
+// process.on('unhandledRejection', err => {
+//     console.log(err.name, err.message)
+//     console.log('unhandledRejection ', 'shutdowning ...')
+//      server.close(() => {
+//          process.exit(1)
+//      })   
+// })
