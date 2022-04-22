@@ -1,12 +1,13 @@
 import '@babel/polyfill'  // hỗ trợ trình duyệt cũ
 import axios from 'axios'
-import {login} from './login'
+import {login,logout} from './login'
 import {mapBox} from './mapBox'
-import {logout} from './login'
+import {bookTour} from './stripe'
 
 const forms = document.querySelector('.form')
 const displayMap = document.querySelector('#map')
 const logoutBtn = document.querySelector('#logout')
+const btnTour = document.querySelectorAll('.btnTour')
 
 if(displayMap){
     const locationMapBox = JSON.parse(displayMap.dataset.locations)
@@ -18,7 +19,6 @@ if(forms)
         e.preventDefault()
         const email = document.querySelector('#email').value
         const password = document.querySelector('#password').value
-        console.log(email, password)
         login(email,password)
     })
 
@@ -26,5 +26,16 @@ if(logoutBtn){
     logoutBtn.addEventListener('click', (e)=>{
         e.preventDefault()
         logout()
+    })
+}
+
+if(btnTour){
+    btnTour.forEach(ele => {
+        ele.addEventListener('click', (e)=>{
+            e.preventDefault()
+            e.target.content = 'Loading ...'
+            const tourId = e.target.dataset.tourId
+            bookTour(tourId)
+        })
     })
 }

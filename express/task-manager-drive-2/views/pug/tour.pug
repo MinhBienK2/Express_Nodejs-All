@@ -1,4 +1,15 @@
 extends base
 
+block append head 
+    //- script(src='https://js.stripe.com/v3/')
+
 block content 
     h1 tour
+    each tour, index in tours 
+        h2=tour.name
+        if user 
+            button.btnTour(class=(`btnTour${index}`) data-tour-id=`${tour.id}`) book tour now! 
+        else 
+            a(href='/login') login to book tour
+    script(src='https://js.stripe.com/v3/')
+    

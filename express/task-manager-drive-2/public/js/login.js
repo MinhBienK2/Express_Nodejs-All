@@ -1,6 +1,8 @@
+import axios from 'axios'
+
 export const login = async (email,password) => {
     try{
-        const data = await axios({
+        const useLogin = await axios({
             method : 'POST',
             url : 'http://127.0.0.1:3000/users/login',
             data : {
@@ -8,7 +10,7 @@ export const login = async (email,password) => {
                 password
             }
         })
-        console.log(data)
+        console.log(useLogin.data)
     }catch(err){
         console.log(err.response)
         console.log(err.toJSON())

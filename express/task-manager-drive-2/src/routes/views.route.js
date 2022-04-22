@@ -10,7 +10,7 @@ router
 
 router 
     .route('/overTours')
-    .get(overTours)
+    .get(isLoggedIn,overTours)
 
 router 
     .route('/login')

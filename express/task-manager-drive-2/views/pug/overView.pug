@@ -6,6 +6,7 @@ block append head
     
 block content 
     each user in users
-        img(src=`${user.photo}` alt='Girl in a jacket')
+        h1= user.name
+        img(src=`http://127.0.0.1:3000/images/users/${user.photo}` alt='Girl in a jacket' style=`height:100px;width:100px;`)
         //- #map(data-locations=`${JSON.stringify(tour.locations)}`)
         //- -return

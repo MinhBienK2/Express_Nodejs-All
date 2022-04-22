@@ -10,11 +10,13 @@ const mongoSanitize = require('express-mongo-sanitize');    // against NoSQL inj
 const xss = require('xss-clean')   // against XSS injection
 const hpp = require('hpp')  // prevent http param pollution
 const cors=require("cors")  // cross origin resource sharing
+const compression = require('compression')  // nén
 
 const userRouter = require('./src/routes/user.router');
 const tourRouter = require('./src/routes/tour.router');
 const reviewRouter = require('./src/routes/review.router');
 const viewsRouter = require('./src/routes/views.route');
+const bookingRouter = require('./src/routes/booking.route');
 
 const AppError = require('./utils/appError');
 const errorHandler = require('./controllers/error.controller');
@@ -23,6 +25,7 @@ const {project} = require('./controllers/auth.controller');
 dotenv.config({path : './config.env'})
 require('./src/db/db')
 const app = express();
+app.enable('trust proxy')
 const port = process.env.PORT || 3000
 
 // development logging middleware
@@ -70,6 +73,8 @@ app.use(hpp({
     ]
 }))
 
+app.use(compression())
+
 // serving static files
 app.use(express.static(path.join(__dirname, "public")))
 
@@ -99,6 +104,7 @@ app.use('/',viewsRouter)
 app.use('/users',userRouter)
 app.use('/tours',tourRouter)
 app.use('/reviews',reviewRouter)
+app.use('/bookings',bookingRouter)
 
 app.all('*',(req,res,next)=>{
     next(new AppError(`Can not find ${req.originalUrl} on this server ! `,404))
@@ -116,10 +122,10 @@ const server = app.listen(port,()=>{
 //     process.exit(1)  
 // })
 
-// process.on('unhandledRejection', err => {
-//     console.log(err.name, err.message)
-//     console.log('unhandledRejection ', 'shutdowning ...')
-//      server.close(() => {
-//          process.exit(1)
-//      })   
-// })
+process.on('unhandledRejection', err => {
+    console.log(err.name, err.message)
+    console.log('unhandledRejection ', 'shutdowning ...')
+     server.close(() => {
+         process.exit(1)
+     })   
+})

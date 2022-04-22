@@ -14,7 +14,7 @@ exports.deleteTour = handleFactory.deleteOne(Tour)
 
 //upload files 
 
-const multerMemory = multer.memoryStorage()
+const multerStores = multer.memoryStorage()
 
 const multerFilters = (req,file,cb) => {
     if(file.mimetype.startsWith('image')) {
@@ -25,45 +25,39 @@ const multerFilters = (req,file,cb) => {
 }
 
 const upload = multer({
-    storage: multerMemory,
+    storage: multerStores,
     fileFilter: multerFilters
 })
 
+exports.uploadTourImage = upload.fields([
+    { name: 'imageCover', maxCount: 1},
+    { name: 'images', maxCount: 3 }
+])
 
-exports.resizeTourPhoto = async (req,res,next) => {
-    console.log(req.files.imageCover)
+exports.resizeTourPhoto = async(req,res,next) => {
+    console.log(req.files)
     if(!req.files.imageCover || !req.files.images) return next()
     req.body.imageCover = `tours-${req.params.id}-${Date.now()}-cover.jpeg`
-    console.log(req.body.imageCover)
-    await sharp(req.files.imageCover.buffer)
-        .resize(700,700)
+    await sharp(req.files.imageCover[0].buffer)
+        .resize(1100,1000)
         .toFormat('jpeg')
         .jpeg({quality : 90})
         .toFile(`public/images/tours/${req.body.imageCover}`)
-    // req.body.images = []
-    // await Promise.all(
-    //     req.files.images.map(async (file,index) => {
-    //         const fileImages = `tours-${req.params.id}-${Date.now()}-${index+1}.jpeg`
-    //         await sharp(file.buffer)
-    //             .resize(1200,700)
-    //             .toFormat('jpeg')
-    //             .jpeg({quality : 90})
-    //             .toFile(`public/images/tours/${fileImages}`)
-    //         req.body.images.push(fileImages) 
-    //     })
-    // )
+    req.body.images = []
+    await Promise.all(
+        req.files.images.map(async (file,index) => {
+            const fileImages = `tours-${req.params.id}-${Date.now()}-${index+1}.jpeg`
+            await sharp(file.buffer)
+                .resize(1200,700)
+                .toFormat('jpeg')
+                .jpeg({quality : 90})
+                .toFile(`public/images/tours/${fileImages}`)
+            req.body.images.push(fileImages) 
+        })
+    )
     next()
 }
 
-exports.uploadTourImage = upload.fields([
-    {
-        name: 'imageCover',
-        maxCount: 1
-    },{
-        name: 'images',
-        maxCount: 3
-    }
-])
 
 exports.getTourStats =CatchAsync(async (req, res, next) => {
     const tourStats = await Tour.aggregate([
