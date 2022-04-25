@@ -2,15 +2,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
-const path = require('path')
+const path = require('path');
 const cookieParser = require('cookie-parser');
-const rateLimit = require('express-rate-limit') 
-const helmet = require('helmet') 
-const mongoSanitize = require('express-mongo-sanitize');    // against NoSQL injection
-const xss = require('xss-clean')   // against XSS injection
-const hpp = require('hpp')  // prevent http param pollution
-const cors=require("cors")  // cross origin resource sharing
-const compression = require('compression')  // nén
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');    // against NoSQL injection;
+const xss = require('xss-clean');   // against XSS injection;
+const hpp = require('hpp');  // prevent http param pollution
+const cors=require("cors"); // cross origin resource sharing
+const compression = require('compression');  // nén
 
 const userRouter = require('./src/routes/user.router');
 const tourRouter = require('./src/routes/tour.router');
@@ -25,23 +25,23 @@ const {project} = require('./controllers/auth.controller');
 dotenv.config({path : './config.env'})
 require('./src/db/db')
 const app = express();
-app.enable('trust proxy')
-const port = process.env.PORT || 3000
+app.enable('trust proxy');
+const port = process.env.PORT || 3000;
 
 // development logging middleware
 if(process.env.NODE_ENV === 'development'){
-    app.use(morgan('dev'))
+    app.use(morgan('dev'));
 }
-console.log(process.env.NODE_ENV)
+console.log(process.env.NODE_ENV);
 
-// set security HTTP headers
+// set security HTTP headers;
 app.use(helmet({
     contentSecurityPolicy: false,
     // referrerPolicy: { policy: "no-referrer" }
 }))
 
 
-// limit request from same API
+// limit request from same API;
 const limiter = rateLimit({
 	max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
 	windowMs: 60 * 60 * 1000, // 15 minutes
@@ -53,7 +53,7 @@ app.use(limiter)
 
 // body parser, reading data from body into req.body
 app.use(express.json({limit: '10kb'}));
-app.use(express.urlencoded({extended : true, limit : '10kb'}))    // dùng kiểu như gửi dữ liệu từ form,  extended : true, to allow nested objects in body
+app.use(express.urlencoded({extended : true, limit : '10kb'}));    // dùng kiểu như gửi dữ liệu từ form,  extended : true, to allow nested objects in body;
 
 // set data sanitization against NoSQL query injection
 app.use(mongoSanitize());
