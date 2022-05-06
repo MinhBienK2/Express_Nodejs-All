@@ -1,0 +1,5 @@
+module.exports.userRoute = require('./user.route')
+module.exports.reviewRoute = require('./review.route')
+module.exports.postRoute = require('./post.route')
+module.exports.categoryRoute = require('./category.route')
+module.exports.viewRoute = require('./view.route')
