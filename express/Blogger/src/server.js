@@ -29,7 +29,6 @@ const corsOptions ={
 //config View Engine
 configViewEngine(app)
 
-
 app.use('/api/v1/users',userRoute)
 app.use('/api/v1/posts',postRoute)
 app.use('/api/v1/reviews',reviewRoute)

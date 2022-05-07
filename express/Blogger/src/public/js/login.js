@@ -12,7 +12,10 @@ const callApiLogin = async () => {
                 password : password.value
             }
         })
-        console.log(sendData.data)
+        if(sendData.data.token){
+            window.location.href =  '/';
+            // delete req.session.returnTo;
+        }
     }catch(err) {
         alert(err.response.data.message)
         console.log(err.response)

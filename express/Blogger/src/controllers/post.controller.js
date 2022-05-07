@@ -4,6 +4,7 @@ const {Post} = require('../models')
 const {featureService,postService} = require('../services')
 
 
+const getAllPostsWithCategory = postService.getAllPostsWithCategory
 
 const createPost = postService.createPost
 const getAllPosts = featureService.getAll(Post,['userId','categoryId'])
@@ -16,5 +17,6 @@ module.exports = {
     getPost,
     createPost,
     updatePost,
-    deletePost
+    deletePost,
+    getAllPostsWithCategory
 }

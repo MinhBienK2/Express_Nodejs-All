@@ -41,6 +41,26 @@ const resizePostPhoto = CatchAsync(async(req,res,next) => {
 })
 
 
+const getAllPostsWithCategory = CatchAsync(async (req,res,next) => {
+    const categoryId = req.params.categoryId
+    let feature = new ApiFeatureFilter(Post.find({categoryId}),req.query)
+        .filter()
+        .sort()
+        .limitFields()
+        .pagination()
+
+    feature.query.populate('userId').populate('categoryId')
+
+    const doc = await feature.query
+    if(!doc) {
+        next(new ApiError(`posts not found`, 404))
+    }
+    res.status(200).json({
+        status: 'success',
+        data : doc
+    })
+})
+
 const createPost = CatchAsync(async (req,res,next) => {
     const categoryId = req.params.categoryId
     const userId = req.user.id
@@ -59,8 +79,10 @@ const createPost = CatchAsync(async (req,res,next) => {
 
 
 
+
 module.exports = {
     createPost,
     uploadPostImage,
-    resizePostPhoto
+    resizePostPhoto,
+    getAllPostsWithCategory
 }

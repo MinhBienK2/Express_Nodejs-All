@@ -10,6 +10,7 @@ router
 
 router
     .route('/:categoryId')
+    .get(postController.getAllPostsWithCategory)
     .post(
         protect,
         restrictTo('user','boss','admin'),

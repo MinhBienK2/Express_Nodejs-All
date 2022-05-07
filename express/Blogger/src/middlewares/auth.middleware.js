@@ -34,29 +34,30 @@ const restrictTo = (...restrict) =>CatchAsync(async (req,res,next) => {
 
 
 const isLoggedIn = async (req,res,next) => {
-    if(req.cookies.jwt){
-        try{
-            console.log(req.cookies.jwt)
-            const decoded = await jwt.verify(req.cookies.jwt,process.env.JWT_SECRET)
-            const currentUser = await User.findById(decoded._id)
-            if(!currentUser) {
-                console.log('hello')
-                res.redirect('login')
-                return
+    try{
+        if(req.cookies.jwt){
+            try{
+                const decoded = await jwt.verify(req.cookies.jwt,process.env.JWT_SECRET)
+                const currentUser = await User.findById(decoded._id)
+                if(!currentUser) {
+                    res.redirect('login')
+                    return
+                }
+                if(currentUser.changePasswordAfter(decoded.iat)){
+                    res.redirect('login')
+                    return 
+                }
+                res.locals.user = currentUser
+                next()
+            } catch(err){
+                return next()
             }
-            if(currentUser.changePasswordAfter(decoded.iat)){
-                console.log('hello')
-                res.redirect('login')
-                return
-            }
-            res.locals.user = currentUser
-            next()
-        } catch(err){
-            return next()
         }
+        res.redirect('/login')
+        return
+    }catch(err){
+        console.log(err)
     }
-    res.redirect('/login')
-    return
 }
 
 const logout = CatchAsync(async (req,res,next) => {
