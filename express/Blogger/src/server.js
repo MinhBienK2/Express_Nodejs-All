@@ -4,8 +4,10 @@ if (process.env.NODE_ENV === "development") {
     console.log(process.env.NODE_ENV);
 }
 
+const mongoose = require('mongoose')
 const express = require('express')
 const cors = require('cors')
+const session = require('express-session');
 
 const connectDB = require('./config/database')
 const configViewEngine = require('./config/viewEngine')
@@ -14,8 +16,20 @@ import ApiError from './utils/ApiError'
 import {reviewRoute,postRoute,userRoute,categoryRoute,viewRoute} from './routes/v1'
 
 const app = express()
-const port = process.env.PORT || 3000
 connectDB()
+
+app.enable('trust proxy');
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}))
+
+const port = process.env.PORT || 3000
 
 // cors middleware
 const corsOptions ={
@@ -34,6 +48,8 @@ app.use('/api/v1/posts',postRoute)
 app.use('/api/v1/reviews',reviewRoute)
 app.use('/api/v1/categories',categoryRoute)
 app.use('/',viewRoute)
+
+
 
 // middlewares found
 app.all('*', (req, res, next) => {

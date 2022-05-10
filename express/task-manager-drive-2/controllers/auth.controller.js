@@ -14,7 +14,7 @@ const signToken = _id => {
     })
 }
 
-const createSendToken = (user,statusCode,res) => {
+const createSendToken = (user,statusCode,req,res) => {
     // console.log(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000)
     const cookieOptions ={
         expires : new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
@@ -37,7 +37,7 @@ exports.signup = CatchAsync(async (req,res,next) => {
     await user.save()
     const url = `${req.protocol}://${req.get('host')}/me`
     new Email(user,url).sendWelcome()
-    createSendToken(user,201,res)
+    createSendToken(user,201,req,res)
 })
 
 exports.login = CatchAsync(async (req,res,next) => {
@@ -50,7 +50,7 @@ exports.login = CatchAsync(async (req,res,next) => {
         return next(new AppError('Incorrect email or password',401))
     const token = signToken(user._id)
     // const token = await user.generateAuthToken()
-    createSendToken(user,200,res)
+    createSendToken(user,200,req,res)
 })
 
 exports.logout = CatchAsync(async (req,res,next) => {
@@ -134,7 +134,7 @@ exports.forgotPassword = CatchAsync(async (req, res, next) => {
         console.log(err)
         return next(new AppError('There was an error sending the email. Try again later', 500))
     }
-    createSendToken(user,200,res)
+    createSendToken(user,200,req,res)
 })
 
 exports.resetPassword = CatchAsync(async (req, res, next) => {
@@ -153,7 +153,7 @@ exports.resetPassword = CatchAsync(async (req, res, next) => {
 
     // 4) Log the user in, send JWT
     const token = signToken(user._id)
-    createSendToken(user,200,res)
+    createSendToken(user,200,req,res)
 })
 
 
@@ -166,5 +166,5 @@ exports.updateMyPassword = CatchAsync(async (req,res,next) => {
     user.passwordConfirm = req.body.passwordConfirm
     await user.save()
     const token = signToken(user._id)
-    createSendToken(user,200,res)
+    createSendToken(user,200,req,res)
 })

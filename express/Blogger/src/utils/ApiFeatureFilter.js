@@ -3,6 +3,26 @@ class ApiFeatureFilter {
         this.query = query,
         this.queryString = queryString
     }
+    search(){
+        const queryObj = {...this.queryString}
+        const excludesField = ['page','limit','fields','sort','select']
+        excludesField.map((el) => {
+            delete queryObj[el]
+        })
+        // let queyrObjStr = JSON.stringify(queryObj)
+        // queyrObjStr = queyrObjStr.replace(/({"title":")/,``).replace(/("})/,``)
+        // this.query.find({$text: {$search: `${queryObj.title}`}}) 
+        if(queryObj.title){
+            this.query.find({
+                title : {
+                    $regex : `${queryObj.title}`,
+                    $options : 'i'
+                }
+            }) 
+        }
+        return this
+    }
+
 
     filter(){
         const queryObj = {...this.queryString}
@@ -21,6 +41,8 @@ class ApiFeatureFilter {
             const sortBy = this.queryString.sort.split(',').join(' ')
             console.log(sortBy)
             this.query = this.query.sort(sortBy)
+        }else {
+            this.query = this.query.sort('-createdAt')
         }
         return this
     }

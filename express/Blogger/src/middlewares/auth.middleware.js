@@ -3,6 +3,7 @@ const CatchAsync = require('../utils/CatchAsync')
 const {User} = require('../models')
 const jwt = require('jsonwebtoken')
 
+
 const protect = CatchAsync(async (req,res,next) => {
     let token ;
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
@@ -13,7 +14,7 @@ const protect = CatchAsync(async (req,res,next) => {
     if(!token) {
         return next(new ApiError('token not exists !',400))
     }
-    const decoded = await jwt.verify(token,process.env.JWT_SECURE)
+    const decoded = await jwt.verify(token,process.env.JWT_SECRET)
     const freshUser = await User.findOne(decoded._id)
     if(!freshUser) {
         next(new ApiError('the user belonging to this token dose no longer exist',401))
@@ -33,46 +34,28 @@ const restrictTo = (...restrict) =>CatchAsync(async (req,res,next) => {
 })
 
 
-const isLoggedIn = async (req,res,next) => {
-    try{
-        if(req.cookies.jwt){
-            try{
-                const decoded = await jwt.verify(req.cookies.jwt,process.env.JWT_SECRET)
-                const currentUser = await User.findById(decoded._id)
-                if(!currentUser) {
-                    res.redirect('login')
-                    return
-                }
-                if(currentUser.changePasswordAfter(decoded.iat)){
-                    res.redirect('login')
-                    return 
-                }
-                res.locals.user = currentUser
-                next()
-            } catch(err){
-                return next()
-            }
+const isLoggedIn = CatchAsync(async (req,res,next) => {
+    if(req.cookies.jwt){
+        const decoded = await jwt.verify(req.cookies.jwt,process.env.JWT_SECRET)
+        const currentUser = await User.findById(decoded.id)
+        if(!currentUser) {
+            return next()
         }
-        res.redirect('/login')
-        return
-    }catch(err){
-        console.log(err)
+        if(currentUser.changePasswordAfter(decoded.iat)){
+            return next()
+        }
+        req.session.sessionUser = currentUser
+        res.locals.user = currentUser
+        return next()
     }
-}
-
-const logout = CatchAsync(async (req,res,next) => {
-    res.cookie('jwt','loggedout',{
-        expires : new Date(Date.now() + 10 * 1000),
-        httpOnly : true
-    })
-    res.status(200).json({
-        status : 'success'
-    })
+    res.locals.user = null
+    req.session.sessionUser = null
+    // req.session.destroy();
+    next()
 })
 
 module.exports = {
     protect,
     restrictTo,
-    isLoggedIn,
-    logout
+    isLoggedIn
 }

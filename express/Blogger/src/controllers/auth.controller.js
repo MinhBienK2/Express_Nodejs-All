@@ -19,11 +19,21 @@ const login = CatchAsync(async (req,res,next) => {
     if(!user || !encodePass) {
         return next(new ApiError('incorrect email or password !',404))
     }
-    authService.sendResponeToken(user,200,res)
+    authService.sendResponeToken(user,200,req,res)
 })
 
+const logout = CatchAsync(async (req,res,next) => {
+    res.cookie('jwt','loggedout',{
+        expires : new Date(Date.now() + 0 * 1000),
+        httpOnly : true
+    }) 
+    res.status(200).json({
+        status : 'success'
+    })
+})
 
 module.exports = {
     login,
-    signup
+    signup,
+    logout
 }

@@ -1,0 +1,27 @@
+<div>
+    <h1>BLog</h1>
+    <% if(user) { %>
+        <h3> <%= user.name %></h3>
+        <button id="profile" data-user-id="<%=user.id%>">Profile</button>
+        <button id="logout">Logout</button>
+    <% } else {%>
+      <button>
+        <a href="/login">Login</a>
+      </button>
+      <button>
+        <a href="/signup">Signup</a>
+      </button>
+    <% } %>
+</div>
+<ul class="nav nav-tabs" id="menu"></ul>
+<div class="d-flex">
+  <input
+    class="form-control me-2"
+    type="search"
+    placeholder="Search"
+    id="inputSearch"
+    value=""
+  />
+  <button class="btn btn-outline-success" id="button-search" type="submit">Search</button>
+</div>
+<script src="/js/nav.js"></script>

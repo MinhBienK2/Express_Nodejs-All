@@ -2,6 +2,7 @@ const email = document.querySelector('#email')
 const password = document.querySelector('#password')
 const submit = document.querySelector('#submit')
 
+
 const callApiLogin = async () => {
     try{
         const sendData = await axios({
@@ -12,9 +13,9 @@ const callApiLogin = async () => {
                 password : password.value
             }
         })
+        // console.log(sendData.data.token)
         if(sendData.data.token){
             window.location.href =  '/';
-            // delete req.session.returnTo;
         }
     }catch(err) {
         alert(err.response.data.message)

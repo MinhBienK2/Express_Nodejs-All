@@ -9,6 +9,10 @@ router
     .get(postController.getAllPosts)
 
 router
+    .route('/me/:userId')
+    .get(postController.getAllPostMe)
+
+router
     .route('/:categoryId')
     .get(postController.getAllPostsWithCategory)
     .post(

@@ -8,6 +8,7 @@ const getAll = (Model,populates=[]) => CatchAsync(async (req,res,next) => {
         .sort()
         .limitFields()
         .pagination()
+        .search()
 
     //populates
     if(populates){

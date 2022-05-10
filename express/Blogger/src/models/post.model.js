@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const moment = require('moment')
 
 const postSchema = new mongoose.Schema({
     title : {
@@ -21,14 +22,30 @@ const postSchema = new mongoose.Schema({
     categoryId : {
         type : mongoose.Schema.ObjectId,
         ref : 'Categories',
+    },
+    createdAt : {
+        type : Date,
+        default : Date.now
     }
 },{
-    timestamps : true
+    timestamps : false,
 })
 
-postSchema.pre('save', async function (next) {
-    // console.log(res.user)
+postSchema.index({
+    title : 'text'
 })
+
+// postSchema.pre('save',async function(next) {
+//     console.log(this.createdAt)
+//     this.createdAt = moment(this.createdAt).format('YYYY-MM-DD HH:mm:ss')
+//     next()
+// })
+
+// postSchema.pre(/^find/,async function(next) {
+//     c
+//     this.createdAt = await moment(this.createdAt,'yyyy-MM-DD HH:mm:ss')
+//     next()
+// })
 
 const Post = mongoose.model('Posts', postSchema);
 
