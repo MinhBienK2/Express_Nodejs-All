@@ -30,11 +30,16 @@ const getCreatePost = CatchAsync(async (req,res,next) => {
   res.render('createPost')
 })
 
+const uploadFile = CatchAsync(async (req,res,next) => {
+  res.send('uploadFile 123')
+})
+
 module.exports = {
   getSignup,
   getLogin,
   getAllPosts,
   getSearch,
   getProfile,
-  getCreatePost
+  getCreatePost,
+  uploadFile
 };

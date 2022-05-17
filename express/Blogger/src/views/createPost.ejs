@@ -1,35 +1,53 @@
-<%- include('templates/header'); -%>
-<h1>Create Post </h1>
+<%- include('templates/summernote'); -%>
+<h1>Create Post</h1>
 <div class="mb-3 row">
-    <label for="title" class="col-sm-2 col-form-label">Title</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control" id="title" value="" name="title" />
-    </div>
-</div>
-<div class="mb-3 row">
-  <label for="description" class="col-sm-2 col-form-label">Description</label>
+  <label for="title" class="col-sm-2 col-form-label">Title</label>
   <div class="col-sm-10">
-    <input type="text" class="form-control" id="description" value="" name="description" />
+    <input type="text" class="form-control" id="title" value="" name="title" />
   </div>
 </div>
 <div class="mb-3 row">
   <label for="photo" class="col-sm-2 col-form-label">Photo</label>
   <div class="col-sm-10">
-    <input
-      type="file"
-      class="form-control"
-      id="photo"
-      value=""
-      name="photo"
-    />
+    <input type="file" class="form-control" id="photo" value="" name="photo" />
+  </div>
 </div>
-<div class="mb-3 row">
+  <div class="mb-3 row">
     <label for="selectCategory" class="col-sm-2 col-form-label">Category</label>
-    <select class="form-select" id="selectCategory" aria-label="Default select example"></select>
-</div>
-<div class="col-auto">
-  <button id="create" class="btn btn-primary mb-3">Create</button>
-</div>
+    <select
+      class="form-select"
+      id="selectCategory"
+      aria-label="Default select example"
+    ></select>
+  </div>
+    <!-- <label for="description" class="col-sm-2 col-form-label">Description</label> -->
+    <!-- <div class="col-sm-10">
+    <input type="text" class="form-control" id="description" value="" name="description" /> -->
+    <!-- <div class="container">
+      <div id="editorjs"></div>
+    </div> -->
+    <label>Description</label>
+    <div id="summernote"></div>
+  <div class="col-auto">
+    <button id="create" class="btn btn-primary mb-3">Create</button>
+  </div>
+  <div class="col-auto">
+    <button id="test" class="btn btn-primary mb-3">Test</button>
+  </div>
 
-<script src="js/createPost.js"></script>
-<%- include('templates/footer'); -%>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/link@2.3.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/raw"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/simple-image@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/image@2.3.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/checklist@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/link@2.3.0"></script> -->
+  <!-- <script src="js/editor/simple-image.js"></script>
+  <script src="js/editor/editor.js"></script> -->
+  <script src="js/createPost.js"></script>
+  <script src="js/summernote/summernote.js"></script>
+  <%- include('templates/footer'); -%>

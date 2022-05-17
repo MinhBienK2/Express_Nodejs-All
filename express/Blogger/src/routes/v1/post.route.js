@@ -3,6 +3,7 @@ const router = express.Router();
 const {postController} = require('../../controllers')
 const {protect,restrictTo} = require('../../middlewares/auth.middleware')
 const postService = require('../../services/post.service')
+const uploadMiddleware = require('../../middlewares/upload.middleware')
 
 router 
     .route('/')
@@ -18,8 +19,8 @@ router
     .post(
         protect,
         restrictTo('user','boss','admin'),
-        postService.uploadPostImage,
-        postService.resizePostPhoto,
+        uploadMiddleware.uploadPostImage,
+        uploadMiddleware.resizePostPhoto,
         postController.createPost
     )
 
